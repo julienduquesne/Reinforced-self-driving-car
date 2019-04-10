@@ -69,15 +69,19 @@ When we pass 0.5, we slow the reducing of epsilon, as well as when we pass 0.3 a
 #### Choosing the reward function
 The reward function is the most important thing in our model because it will teach the car what actions are good or not. 
 
-I tested multiple reward functions whose performances are illustrated by the graphs below, one for each reward function, trained over 10000 episodes, with a value of 0.7 for gamma and a learning rate of 0.0005 for our Adam optimizer.
-Firstly I tested multiplying the speed by the minimum of the distances measured by sensors so that the car is encouraged to go fast while staying far from the wall. I obtained the graph of convergence below and a best score of 186% of the track completed (One lap and 86%).
-The graph is obtained by taking the mean of the score over the last 200 scores. It represents how fast our model converges.
+I tested multiple reward functions whose performances are illustrated by the graphs below, one for each reward function, trained over 10000 episodes, with a value of 0.7 for gamma and a learning rate of 0.0005 for our Adam optimizer. The graphs are obtained by taking the mean of the score over the last 200 scores. It represents how fast our model converges.
+Firstly, I tested to gave a reward equal to the speed if the car is in the circuit and -1 if not. I reached a score of 86% of the circuit completed and the graph below shows the convergence.
+
+![results2](./graphs/speed.png)
+
+Secondly I tested multiplying the speed by the minimum of the distances measured by sensors so that the car is encouraged to go fast while staying far from the wall. I obtained the graph of convergence below and a best score of 186% of the track completed (One lap and 86%). We see the score is better than with the speed only as reward.
+
 
 ![results1](./graphs/speed_times_distances.png)
 
 #### Choosing the neural network 
 
-Since the problem is very simple and since it musn't be slow to train, we don't need here a deep neural network. I then opted for a very simple model with one hidden layer of 32 neurons with ReLu activation.
+Since the problem is very simple and since it musn't be slow to train, we don't need here a deep neural network. I then opted for a very simple model with one hidden layer of 64 neurons with ReLu activation.
 
 As optimizer, I chose Adam with the learning rate specified in parameters. After multiple tries, I found that a small learning rate was required, indeed if the learning rate is too big, the model can't learn precisely enough to pass complex corners.
 
