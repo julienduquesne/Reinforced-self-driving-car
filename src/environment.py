@@ -26,9 +26,7 @@ class Environment(object):
     def reward(self) -> float:
         """Computes the reward at the present moment"""
 
-        # TODO(students): !!!!!!!!! IMPLEMENT THIS !!!!!!!!!!!!!!  """
         # This should return a float"""
-        # reward = (self.car.speed>0)*(100*self.circuit.progression)**2
         if not(self.isEnd()):
             reward = self.car.speed*min(self.car.distances())
         else:

@@ -41,8 +41,6 @@ class DQLAgent(object):
         model.add(Dense(self.action_size))
         model.add(Activation('linear'))
         model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
-        #model.compile(loss='mse', optimizer=Adagrad())
-        #model.load_weights('weights.h5')
         return model
 
     def updateEpsilon(self):
