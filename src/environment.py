@@ -30,9 +30,9 @@ class Environment(object):
         # This should return a float"""
         # reward = (self.car.speed>0)*(100*self.circuit.progression)**2
         if not(self.isEnd()):
-            reward = 10*self.car.speed*(min(self.car.distances())**2)
+            reward = self.car.speed*min(self.car.distances())
         else:
-            reward = -10
+            reward = -1
         return reward
 
     def isEnd(self) -> bool:

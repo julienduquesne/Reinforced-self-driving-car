@@ -3,17 +3,18 @@ import keras.models
 import os
 import random
 import numpy as np
+import matplotlib.pyplot as plt 
 
 from collections import deque
 from keras.models import Sequential
 from keras.layers import Dense,Activation, Dropout
-from keras.optimizers import Adam
-
+from keras.optimizers import Adam, Adagrad
+from keras import backend as K
 
 class DQLAgent(object):
     def __init__(
             self, state_size=-1, action_size=-1,
-            max_steps=200, gamma=1, epsilon=0.7, learning_rate=0.1):
+            max_steps=200, gamma=1, epsilon=1.0, learning_rate=0.1,num_episodes=1000):
         self.state_size = state_size
         self.action_size = action_size
         self.max_steps = max_steps
@@ -21,7 +22,11 @@ class DQLAgent(object):
         self.gamma = gamma   # discount rate
         self.epsilon = epsilon  # exploration rate
         self.learning_rate = learning_rate  # learning_rate
+        self.num_episodes = num_episodes
         self.memory_epsilon = 0
+        self.step = False
+        self.best_score = 0
+        self.results = []
         if self.state_size > 0 and self.action_size > 0:
             self.model = self.build_model()
 
@@ -30,22 +35,27 @@ class DQLAgent(object):
     def build_model(self):
         """Neural Net for Deep-Q learning Model."""
         model = Sequential()
-        model.add(Dense(32,input_dim=self.state_size))
+        model.add(Dense(64,input_dim=self.state_size))
         model.add(Activation('relu'))
+
         model.add(Dense(self.action_size))
         model.add(Activation('linear'))
         model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
+        #model.compile(loss='mse', optimizer=Adagrad())
+        #model.load_weights('weights.h5')
         return model
 
     def updateEpsilon(self):
         """This function change the value of self.epsilon to deal with the
         exploration-exploitation tradeoff as time goes"""
-        if(self.epsilon>0.5):
-            self.epsilon -= 0.0003
-        elif(self.epsilon>0.3):
-            self.epsilon -= 0.0001
-        elif(self.epsilon>0):
-            self.epsilon -= 0.0002
+        if self.epsilon>0.5:
+            self.epsilon -= 0.5/(self.num_episodes*0.1)
+        elif self.epsilon>0.3:
+            self.epsilon -= 0.2/(self.num_episodes*0.2)
+        elif self.epsilon>0.1:
+            self.epsilon -= 0.2/(self.num_episodes*0.3)
+        elif self.epsilon>0:
+            self.epsilon-= 0.1/(self.num_episodes*0.35)
 
     def save(self, output: str):
         self.model.save(output)
@@ -118,17 +128,22 @@ class DQLAgent(object):
         return returns, num_steps, completed
 
     def train(
-            self, env, episodes, minibatch, output='weights4.h5', render=False):
+            self, env, episodes, minibatch, output='weights.h5', render=False):
         for e in range(episodes):
-            r, _, completed = self.run_once(env, train=True, greedy=False)
+            r, _, completed = self.run_once(env, train=True, greedy=False)            
+            self.results.append(completed)
             print("episode: {}/{}, return: {}, e: {:.2}, completed:{}".format(
                 e, episodes, r, self.epsilon,completed))
-
+            if completed > self.best_score:
+                self.best_score = completed
+                self.save(output)
+                print('Model saved')
             if len(self.memory) > minibatch:
                 self.replay(minibatch)
-                self.save(output)
-
         # Finally runs a greedy one
+        results_aggregated = [np.mean(self.results[i-200:i]) for i in range(200,len(self.results))]
+        np.save(open('./array_results.npy','wb'),results_aggregated)
+        plt.plot(results_aggregated)
+        plt.show()
         r, n, completed = self.run_once(env, train=False, greedy=True)
-        self.save(output)
         print("Greedy return: {} in {} steps : complete {} of the track".format(r, n, completed))

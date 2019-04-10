@@ -13,11 +13,11 @@ from src.environment import Environment
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--num_episodes', type=int, default=3000)
+    parser.add_argument('--num_episodes', type=int, default=10000)
     parser.add_argument('--max_steps', type=int, default=200)
-    parser.add_argument('--minibatch_size', type=int, default=80)
-    parser.add_argument('--gamma', type=float, default=0.8)
-    parser.add_argument('--learning_rate', type=float, default=0.1)
+    parser.add_argument('--minibatch_size', type=int, default=128)
+    parser.add_argument('--gamma', type=float, default=0.7)
+    parser.add_argument('--learning_rate', type=float, default=0.0005)
     parser.add_argument('--output', type=str, default='weights.h5')
     parser.add_argument('--ui', type=str, default='true')
     args = parser.parse_args()
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     agent = DQLAgent(
         state_size=len(env.current_state), action_size=len(env.actions),
-        gamma=args.gamma, learning_rate=args.learning_rate)
+        gamma=args.gamma, learning_rate=args.learning_rate,num_episodes=args.num_episodes)
 
     agent.train(
         env, episodes=args.num_episodes, minibatch=args.minibatch_size,
