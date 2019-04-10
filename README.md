@@ -53,22 +53,27 @@ Firstly I had hard time to train the car in one time, so what I did to understan
 I firsly started with the reward function being the product between the speed and the squared minimum of distances to the walls measured by the car. If the car crashes, he gets a -1 penalty. This reward encourages the car to move further by being careful. I took 0.7 as value for gamma and trained and neural networks with &1 hidden layer, because the problem is quite simple. My optimizer was Adam whose I could control its learning rate.
 Here are the different step I took to obtain a first model capable of driving around the track:
 * 1rst step : 5000 steps, learning rate = 0.01, minibatch size = 64, greedy policy : linear. I reached a score of 18% of the circuit completed.
-* 2nd step : 3000 step, learning rate = 0.001, minibatch size = 100, greedy policy unchanged (but starting at 0.9). I reached a score of 30% of the circuit completed.
-* 3rd step : 3000 step, learning rate = 0.0001, minibatch size = 128, greedy policy unchanged (but starting at 0.7). I reached a score of 55% of the circuit completed.
-* 4th step : 3000 step, learning rate = 0.00001, minibatch size = 150, greedy policy unchanged (but starting at 0.5). I reached a score of 86% of the circuit completed.
-* 5th step : 2000 step, learning rate = 0.000005, minibatch size = 200, greedy policy unchanged (but starting at 0.3). I reached a score of 154% of the circuit completed.
+* 2nd step : 3000 step, learning rate = 0.001, minibatch size = 100, greedy policy linear (but starting at 0.9). I reached a score of 30% of the circuit completed.
+* 3rd step : 3000 step, learning rate = 0.0001, minibatch size = 128, greedy policy linear (but starting at 0.7). I reached a score of 55% of the circuit completed.
+* 4th step : 3000 step, learning rate = 0.00001, minibatch size = 150, greedy policy linear (but starting at 0.5). I reached a score of 86% of the circuit completed.
+* 5th step : 2000 step, learning rate = 0.000005, minibatch size = 200, greedy policy linear (but starting at 0.3). I reached a score of 154% of the circuit completed.
+
+All the weights saved after a step are save in the folder "steps" of the project. 
 
 #### Greedy policy 
 
 The greedy policy I found by test and trial was the following : start by exploiting a lot new solutions (epsilon start at 1 : full random actions ) and reduce epsilon until it reaches 0.5.
 
-Then continue reducing it but slowly because between 0.2 and 0.5 is the moment when the algorithm learn the most.
-
-Once we reach 0.2, we continue reducing until 0, this is the moment when the algorithm fine-tune its choices.
+When we pass 0.5, we slow the reducing of epsilon, as well as when we pass 0.3 and 0.1. Thus the algorithm spend more time exploiting than exploring.
 
 #### Choosing the reward function
 The reward function is the most important thing in our model because it will teach the car what actions are good or not. 
 
+I tested multiple reward functions whose performances are illustrated by the graphs below, one for each reward function, trained over 10000 episodes, with a value of 0.7 for gamma and a learning rate of 0.0005 for our Adam optimizer.
+Firstly I tested multiplying the speed by the minimum of the distances measured by sensors so that the car is encouraged to go fast while staying far from the wall. I obtained the graph of convergence below and a best score of 186% of the track completed (One lap and 86%).
+The graph is obtained by taking the mean of the score over the last 200 scores. It represents how fast our model converges.
+
+![results1](./graphs/speed_times_distances.png)
 
 #### Choosing the neural network 
 
