@@ -28,7 +28,7 @@ class Environment(object):
 
         # This should return a float"""
         if not(self.isEnd()):
-            reward = self.car.speed*(min(self.car.distances())**2)
+            reward = self.car.speed*(min(self.car.distances()))
         else:
             reward = -1
         return reward

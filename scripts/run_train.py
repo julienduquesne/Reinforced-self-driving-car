@@ -16,7 +16,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_episodes', type=int, default=10000)
     parser.add_argument('--max_steps', type=int, default=200)
     parser.add_argument('--minibatch_size', type=int, default=128)
-    parser.add_argument('--gamma', type=float, default=0.7)
+    parser.add_argument('--gamma', type=float, default=0.5)
     parser.add_argument('--learning_rate', type=float, default=0.0005)
     parser.add_argument('--output', type=str, default='weights.h5')
     parser.add_argument('--ui', type=str, default='false')

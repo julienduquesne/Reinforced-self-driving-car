@@ -83,6 +83,17 @@ As the score was better, I tried to give more influence to the distances to the 
 
 ![results2](./graphs/speed_times_squared_distances.png)
 
+#### Choosing gamma 
+
+Gamma defines how much will the car take the future into account.
+
+I tested three values  0.5, 0.7 and 0.9.
+
+0.5 gave a max result of 77% of the circuit completed, 0.7 gave 186% and only 28% for 0.9.
+
+Then I decided to narrow my search to 0.65, 0.7 and 0.75.
+0.65 gave me a very good result with 277% completed and without crashing! (the race stopped because we reached the number maximal of episodes).
+
 #### Choosing the neural network 
 
 Since the problem is very simple and since it musn't be slow to train, we don't need here a deep neural network. I then opted for a very simple model with one hidden layer of 64 neurons with ReLu activation.
