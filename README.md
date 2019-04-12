@@ -66,20 +66,21 @@ The greedy policy I found by test and trial was the following : start by exploit
 
 When we pass 0.5, we slow the reducing of epsilon, as well as when we pass 0.3 and 0.1. Thus the algorithm spend more time exploiting than exploring.
 
+#### Choosing the neural network 
+
+Since the problem is very simple and since it musn't be slow to train, we don't need here a deep neural network. I then opted for a very simple model with one hidden layer of 64 neurons with ReLu activation.
+
 #### Choosing the reward function
 The reward function is the most important thing in our model because it will teach the car what actions are good or not. 
 
 I tested multiple reward functions whose performances are illustrated by the graphs below, one for each reward function, trained over 10000 episodes, with a value of 0.7 for gamma and a learning rate of 0.0005 for our Adam optimizer. The graphs are obtained by taking the mean of the score over the last 200 scores. It represents how fast our model converges.
-Firstly, I tested to gave a reward equal to the speed if the car is in the circuit and -1 if not. I reached a score of 86% of the circuit completed and the graph below shows the convergence.
-
-![results](./graphs/speed.png)
+Firstly, I tested to gave a reward equal to the speed if the car is in the circuit and -1 if not. I reached a score of 86% of the circuit completed.
 
 Secondly I tested multiplying the speed by the minimum of the distances measured by sensors so that the car is encouraged to go fast while staying far from the wall. I obtained the graph of convergence below and a best score of 186% of the track completed (One lap and 86%). We see the score is better than with the speed only as reward.
 
-
 ![results1](./graphs/speed_times_distances.png)
 
-As the score was better, I tried to give more influence to the distances to the wall by squaring it. However I obtained a best score of 55% only, and the graph of convergence below:
+As the score was better, I tried to give more influence to the distances to the wall by squaring it. However I obtained a best score of 55% only, and the graph of convergence below that is very chaotic, it shows that the model doesn't learn very well the reward function that may be too complicated for this model:
 
 ![results2](./graphs/speed_times_squared_distances.png)
 
@@ -94,9 +95,7 @@ I tested three values  0.5, 0.7 and 0.9.
 Then I decided to narrow my search to 0.65, 0.7 and 0.75.
 0.65 gave me a very good result with 277% completed and without crashing! (the race stopped because we reached the number maximal of episodes).
 
-#### Choosing the neural network 
-
-Since the problem is very simple and since it musn't be slow to train, we don't need here a deep neural network. I then opted for a very simple model with one hidden layer of 64 neurons with ReLu activation.
+#### Choosing the optimizer
 
 As optimizer, I chose Adam with the learning rate specified in parameters. After multiple tries, I found that a small learning rate was required, indeed if the learning rate is too big, the model can't learn precisely enough to pass complex corners.
 
