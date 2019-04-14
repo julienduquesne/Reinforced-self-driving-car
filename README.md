@@ -93,7 +93,8 @@ I tested three values  0.5, 0.7 and 0.9.
 0.5 gave a max result of 77% of the circuit completed, 0.7 gave 186% and only 28% for 0.9.
 
 Then I decided to narrow my search to 0.65, 0.7 and 0.75.
-0.65 gave me a very good result with 277% completed and without crashing! (the race stopped because we reached the number maximal of episodes).
+
+0.65 completed 76% of the lap and **0.75 gave me a very good best result with 3 laps fully completed without crashing.** However, it's the best result but not the final result after all the episodes so the model is still not perfect, we will content ourselves with the weights that gave us 3 laps completed.
 
 #### Choosing the optimizer
 
