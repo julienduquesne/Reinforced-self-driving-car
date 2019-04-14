@@ -2,6 +2,21 @@
 
 This project aims at learning to a car how to drive on a circuit using deep reinforcement learning. I used a neural network to predict the reward being in a certain state and taking a certain action.
 
+### Table of contents
+* [Getting started](#getting-started)
++ [Parameters available for the training](#parameters-available-for-the-training)
+* [My project](#my-project)
++ [Principal components](#principal-components)
+    - [Environment](#environment)
+    - [Agent](#agent)
++ [My methodology](#my-methodology)
+    - [Training the model step by step](#training-the-model-step-by-step)
+    - [Greedy policy](#greedy-policy)
+    - [Choosing the neural network](#choosing-the-neural-network)
+    - [Choosing the reward function](#choosing-the-reward-function)
+    - [Choosing gamma](#choosing-gamma)
+    - [Choosing the optimizer](#choosing-the-optimizer)
+
 ## Getting started
 
 Start by installing the requirements:
