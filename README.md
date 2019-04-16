@@ -2,6 +2,8 @@
 
 This project aims at learning to a car how to drive on a circuit using deep reinforcement learning. I used a neural network to predict the reward being in a certain state and taking a certain action.
 
+![Image](./graphs/circuit.png)
+
 ### Table of contents
 * [Getting started](#getting-started)
 + [Parameters available for the training](#parameters-available-for-the-training)

@@ -19,7 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--gamma', type=float, default=0.5)
     parser.add_argument('--learning_rate', type=float, default=0.0005)
     parser.add_argument('--output', type=str, default='weights.h5')
-    parser.add_argument('--ui', type=str, default='false')
+    parser.add_argument('--ui', type=str, default='true')
     args = parser.parse_args()
 
     circuit = Circuit(
