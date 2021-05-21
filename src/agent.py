@@ -1,25 +1,25 @@
 import logging
-import keras.models
 import os
 import random
-import numpy as np
-import matplotlib.pyplot as plt 
-
 from collections import deque
+
+import keras.models
+import matplotlib.pyplot as plt
+import numpy as np
+from keras.layers import Dense, Activation
 from keras.models import Sequential
-from keras.layers import Dense,Activation, Dropout
-from keras.optimizers import Adam, Adagrad
-from keras import backend as K
+from keras.optimizers import Adam
+
 
 class DQLAgent(object):
     def __init__(
             self, state_size=-1, action_size=-1,
-            max_steps=200, gamma=1, epsilon=1.0, learning_rate=0.1,num_episodes=1000):
+            max_steps=200, gamma=1, epsilon=1.0, learning_rate=0.1, num_episodes=1000):
         self.state_size = state_size
         self.action_size = action_size
         self.max_steps = max_steps
         self.memory = deque(maxlen=2000)
-        self.gamma = gamma   # discount rate
+        self.gamma = gamma  # discount rate
         self.epsilon = epsilon  # exploration rate
         self.learning_rate = learning_rate  # learning_rate
         self.num_episodes = num_episodes
@@ -35,7 +35,7 @@ class DQLAgent(object):
     def build_model(self):
         """Neural Net for Deep-Q learning Model."""
         model = Sequential()
-        model.add(Dense(64,input_dim=self.state_size))
+        model.add(Dense(64, input_dim=self.state_size))
         model.add(Activation('relu'))
 
         model.add(Dense(self.action_size))
@@ -46,14 +46,14 @@ class DQLAgent(object):
     def updateEpsilon(self):
         """This function change the value of self.epsilon to deal with the
         exploration-exploitation tradeoff as time goes"""
-        if self.epsilon>0.5:
-            self.epsilon -= 0.5/(self.num_episodes*0.1)
-        elif self.epsilon>0.3:
-            self.epsilon -= 0.2/(self.num_episodes*0.2)
-        elif self.epsilon>0.1:
-            self.epsilon -= 0.2/(self.num_episodes*0.3)
-        elif self.epsilon>0:
-            self.epsilon-= 0.1/(self.num_episodes*0.35)
+        if self.epsilon > 0.5:
+            self.epsilon -= 0.5 / (self.num_episodes * 0.1)
+        elif self.epsilon > 0.3:
+            self.epsilon -= 0.2 / (self.num_episodes * 0.2)
+        elif self.epsilon > 0.1:
+            self.epsilon -= 0.2 / (self.num_episodes * 0.3)
+        elif self.epsilon > 0:
+            self.epsilon -= 0.1 / (self.num_episodes * 0.35)
 
     def save(self, output: str):
         self.model.save(output)
@@ -73,8 +73,8 @@ class DQLAgent(object):
 
     def act(self, state, greedy=True):
         sampling = random.random()
-        if(sampling<self.epsilon and not(greedy)):
-            return random.randint(0,12)
+        if sampling < self.epsilon and not (greedy):
+            return random.randint(0, self.action_size)
         else:
             prediction = self.model.predict(state)
             return np.argmax(prediction)
@@ -128,10 +128,10 @@ class DQLAgent(object):
     def train(
             self, env, episodes, minibatch, output='weights.h5', render=False):
         for e in range(episodes):
-            r, _, completed = self.run_once(env, train=True, greedy=False)            
+            r, _, completed = self.run_once(env, train=True, greedy=False)
             self.results.append(completed)
             print("episode: {}/{}, return: {}, e: {:.2}, completed:{}".format(
-                e, episodes, r, self.epsilon,completed))
+                e, episodes, r, self.epsilon, completed))
             if completed > self.best_score:
                 self.best_score = completed
                 self.save(output)
@@ -139,8 +139,8 @@ class DQLAgent(object):
             if len(self.memory) > minibatch:
                 self.replay(minibatch)
         # Finally runs a greedy one
-        results_aggregated = [np.mean(self.results[i-200:i]) for i in range(200,len(self.results))]
-        np.save(open('./array_results.npy','wb'),results_aggregated)
+        results_aggregated = [np.mean(self.results[i - 200:i]) for i in range(200, len(self.results))]
+        np.save(open('./array_results.npy', 'wb'), results_aggregated)
         plt.plot(results_aggregated)
         plt.show()
         r, n, completed = self.run_once(env, train=False, greedy=True)

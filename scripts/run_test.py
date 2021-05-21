@@ -3,6 +3,9 @@ To test a trained agent on an environment from the carl/ directory run
 
 python3 -m scripts.run_test
 """
+import sys
+
+sys.path.append(sys.path[0] + "/..")
 
 import argparse
 import os.path
@@ -10,7 +13,6 @@ import os.path
 from src.agent import DQLAgent
 from src.circuit import Circuit
 from src.environment import Environment
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -21,7 +23,7 @@ if __name__ == '__main__':
 
     agent = DQLAgent(gamma=args.gamma, max_steps=args.max_steps)
     circuit = Circuit(
-        [(0, 0), (0.5, 1), (0, 2), (2, 2), (3, 1), (6, 2), (7,1), (6, 0)], width=0.3)
+        [(0, 0), (0.5, 1), (0, 2), (2, 2), (3, 1), (6, 2), (7, 1), (6, 0)], width=0.3)
 
     env = Environment(circuit, render=True)
     if agent.load(args.model):
